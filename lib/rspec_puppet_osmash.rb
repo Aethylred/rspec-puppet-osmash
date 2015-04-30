@@ -264,6 +264,21 @@ class Rspec_puppet_osmash
           :releasetype     => 'operatingsystemmajrelease',
         },
     }
+
+    matched = Set.new
+    unmatched = Set.new
+    @osmash.each do | os, values |
+      if self.osmetadata.any? { |mos|
+          mos['operatingsystem'] == values[:operatingsystem] and
+          mos['operatingsystemrelease'].include? values[:release]
+      }
+        matched << os
+      else
+        unmatched << os
+      end
+    end
+    @supported = matched.to_a
+    @unsupported = unmatched.to_a
   end
 
   def all
@@ -283,33 +298,11 @@ class Rspec_puppet_osmash
   end
 
   def supported
-    matches = Set.new
-    @osmash.each do | os, values |
-      @metadata['operatingsystem_support'].each do | metaos |
-        if metaos['operatingsystem'] == values[:operatingsystem]
-          if metaos['operatingsystemrelease'].include? values[:release]
-            matches << os
-          end
-        end
-      end
-    end
-    matches
+    @supported
   end
 
   def unsupported
-    matches = Set.new
-    @osmash.each do | os, values |
-      @metadata['operatingsystem_support'].each do | metaos |
-        if metaos['operatingsystem'] == values[:operatingsystem]
-          if ! metaos['operatingsystemrelease'].include? values[:release]
-            matches << os
-          end
-        else
-          matches << os
-        end
-      end
-    end
-    matches
+    @unsupported
   end
 
   def unknown
