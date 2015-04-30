@@ -33,3 +33,4 @@ _ReSharper*/
 *.sublime-workspace
 pkg/
 tests/secret*
+.gem
