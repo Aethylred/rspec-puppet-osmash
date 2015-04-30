@@ -1,6 +1,7 @@
 class Rspec_puppet_osmash
 
   require 'json'
+  require 'set'
 
   def initialize (metadata_file_path = '../metadata.json')
 
@@ -108,56 +109,68 @@ class Rspec_puppet_osmash
         },
       'suse8'              =>
         { :osfamily        => 'Suse',
+          :operatingsystem => 'Suse',
           :release         => '8',
           :releasetype     => 'lsbmajdistrelease',
         },
       'suse9'              =>
         { :osfamily        => 'Suse',
+          :operatingsystem => 'Suse',
           :release         => '9',
           :releasetype     => 'lsbmajdistrelease',
         },
       'suse10'             =>
         { :osfamily        => 'Suse',
+          :operatingsystem => 'Suse',
           :release         => '10',
           :releasetype     => 'lsbmajdistrelease',
         },
       'suse11'             =>
         { :osfamily        => 'Suse',
+          :operatingsystem => 'Suse',
           :release         => '11',
           :releasetype     => 'lsbmajdistrelease',
         },
       'suse12'             =>
         { :osfamily        => 'Suse',
+          :operatingsystem => 'Suse',
           :release         => '12',
           :releasetype     => 'lsbmajdistrelease',
          },
       'suse13'             =>
         { :osfamily        => 'Suse',
+          :operatingsystem => 'Suse',
           :release         => '13',
           :releasetype     => 'lsbmajdistrelease',
         },
       'solaris8'           =>
         { :osfamily        => 'Solaris',
+          :operatingsystem => 'Solaris',
           :release         => '5.8',
           :releasetype     => 'kernelrelease',
         },
       'solaris9'           =>
         { :osfamily        => 'Solaris',
+          :operatingsystem => 'Solaris',
           :release         => '5.9',
           :releasetype     => 'kernelrelease',
         },
       'solaris10'          =>
         { :osfamily        => 'Solaris',
+          :operatingsystem => 'Solaris',
           :release         => '5.10',
           :releasetype     => 'kernelrelease',
         },
       'solaris11'          =>
         { :osfamily        => 'Solaris',
+          :operatingsystem => 'Solaris',
           :release         => '5.11',
           :releasetype     => 'kernelrelease',
         },
       'debian6'            =>
         { :osfamily        => 'Debian',
+          :operatingsystem => 'Debian',
+          :kernel          => 'Linux',
           :release         => '6',
           :codename        => 'Lenny',
           :lsbdistid       => 'Debian',
@@ -183,7 +196,7 @@ class Rspec_puppet_osmash
         },
       'ubuntu1004'         =>
         { :osfamily        => 'Debian',
-          :operatingsystem => 'Debian',
+          :operatingsystem => 'Ubuntu',
           :kernel          => 'Linux',
           :lsbdistid       => 'Ubuntu',
           :release         => '10.04',
@@ -193,7 +206,7 @@ class Rspec_puppet_osmash
         },
       'ubuntu1104'         =>
         { :osfamily        => 'Debian',
-          :operatingsystem => 'Debian',
+          :operatingsystem => 'Ubuntu',
           :kernel          => 'Linux',
           :lsbdistid       => 'Ubuntu',
           :release         => '11.04',
@@ -202,7 +215,7 @@ class Rspec_puppet_osmash
         },
       'ubuntu1204'         =>
         { :osfamily        => 'Debian',
-          :operatingsystem => 'Debian',
+          :operatingsystem => 'Ubuntu',
           :kernel          => 'Linux',
           :lsbdistid       => 'Ubuntu',
           :release         => '12.04',
@@ -212,7 +225,7 @@ class Rspec_puppet_osmash
         },
       'ubuntu1304'         =>
         { :osfamily        => 'Debian',
-          :operatingsystem => 'Debian',
+          :operatingsystem => 'Ubuntu',
           :kernel          => 'Linux',
           :lsbdistid       => 'Ubuntu',
           :release         => '13.04',
@@ -221,7 +234,7 @@ class Rspec_puppet_osmash
         },
       'ubuntu1404'         =>
         { :osfamily        => 'Debian',
-          :operatingsystem => 'Debian',
+          :operatingsystem => 'Ubuntu',
           :kernel          => 'Linux',
           :lsbdistid       => 'Ubuntu',
           :release         => '14.04',
@@ -231,7 +244,7 @@ class Rspec_puppet_osmash
         },
       'ubuntu1504'         =>
         { :osfamily        => 'Debian',
-          :operatingsystem => 'Debian',
+          :operatingsystem => 'Ubuntu',
           :kernel          => 'Linux',
           :lsbdistid       => 'Ubuntu',
           :release         => '15.04',
@@ -240,11 +253,13 @@ class Rspec_puppet_osmash
         },
       'darwin'          =>
         { :osfamily        => 'Darwin',
+          :operatingsystem => 'Darwin',
           :release         => '13',
           :releasetype     => 'operatingsystemmajrelease',
         },
       'unknown'          =>
         { :osfamily        => 'Unknown',
+          :operatingsystem => 'Unknown',
           :release         => '99',
           :releasetype     => 'operatingsystemmajrelease',
         },
@@ -265,6 +280,40 @@ class Rspec_puppet_osmash
 
   def osmetadata
     @metadata['operatingsystem_support']
+  end
+
+  def supported
+    matches = Set.new
+    @osmash.each do | os, values |
+      @metadata['operatingsystem_support'].each do | metaos |
+        if metaos['operatingsystem'] == values[:operatingsystem]
+          if metaos['operatingsystemrelease'].include? values[:release]
+            matches << os
+          end
+        end
+      end
+    end
+    matches
+  end
+
+  def unsupported
+    matches = Set.new
+    @osmash.each do | os, values |
+      @metadata['operatingsystem_support'].each do | metaos |
+        if metaos['operatingsystem'] == values[:operatingsystem]
+          if ! metaos['operatingsystemrelease'].include? values[:release]
+            matches << os
+          end
+        else
+          matches << os
+        end
+      end
+    end
+    matches
+  end
+
+  def unknown
+
   end
 
 end
