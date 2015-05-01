@@ -279,6 +279,21 @@ class Rspec_puppet_osmash
     end
     @supported = matched.to_a
     @unsupported = unmatched.to_a
+
+    knownos = Set.new
+    @osmash.each do | os, values |
+      knownos << values
+    end
+    @known = knownos.to_a
+
+    unknownos = self.osmetadata
+    @osmash.each do | os, values |
+      unknownos.delete_if { | mos |
+        mos['operatingsystem'] == values[:operatingsystem] and
+        mos['operatingsystemrelease'].include? values[:release]
+      }
+    end
+    @unknown = unknownos.to_a 
   end
 
   def all
@@ -305,8 +320,12 @@ class Rspec_puppet_osmash
     @unsupported
   end
 
-  def unknown
+  def known
+    @known
+  end
 
+  def unknown
+    @unknown
   end
 
 end
