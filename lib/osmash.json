@@ -196,7 +196,7 @@
   },
   { "key": "ubuntu1104",
     "osfamily": "Debian",
-    "operatingsystem": "Uuntu",
+    "operatingsystem": "Ubuntu",
     "kernel": "Linux",
     "lsbdistid": "Ubuntu",
     "release": "11.04",

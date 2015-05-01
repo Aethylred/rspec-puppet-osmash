@@ -17,6 +17,19 @@ class Rspec_puppet_osmash
     osmash_library_file = File.read( my_osmash_library )
     @osmash = JSON.parse( osmash_library_file )
 
+    @osmash.map! { |os|
+      unless os['name']
+        if os['codename'] 
+          codename = "\"#{os['codename']}\" "
+        else
+          codename = ""
+        end
+        os.merge( { 'name' => "#{os['operatingsystem']} #{codename}#{os['release']}" } )
+      else
+        os
+      end
+    }
+
     matched = Set.new
     unmatched = Set.new
     @osmash.each do | os |
