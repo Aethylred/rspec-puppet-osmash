@@ -6,7 +6,7 @@ Gem::Specification.new do |s|
   s.description = 'Provides Operation System hashes and validations for rspec-puppet'
   s.authors     = ['Aaron Hicks']
   s.email       = 'aethylred@gmail.com'
-  s.files       = ['lib/rspec_puppet_osmash.rb']
+  s.files       = ['lib/rspec_puppet_osmash.rb','lib/osmash.json']
   s.homepage    = 'http://rubygems.org/gems/hola'
   s.license     = 'Apache-2.0'
 
