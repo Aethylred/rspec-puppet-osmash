@@ -3,7 +3,7 @@ class Rspec_puppet_osmash
   require 'json'
   require 'set'
 
-  def initialize (metadata_file_path = '../metadata.json', osmash_library_path = 'default')
+  def initialize (metadata_file_path = './metadata.json', osmash_library_path = 'default')
 
     metadata_file = File.read( metadata_file_path )
     @metadata = JSON.parse( metadata_file )
