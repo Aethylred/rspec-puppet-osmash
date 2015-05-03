@@ -2,7 +2,7 @@
   "name": "test-metadata",
   "version": "0.0.1",
   "author": "Aethylred",
-  "summary": "Tets metadata for testing",
+  "summary": "Metadata for testing",
   "license": "Apache-2.0",
   "source": "https://github.com/Aethylred/rspec-puppet-osmash.git",
   "project_page": "https://github.com/Aethylred/rspec-puppet-osmash",
@@ -32,23 +32,23 @@
         "7"
       ]
     },
-    {
-      "operatingsystem": "Solaris",
-      "operatingsystemrelease": [
-        "9",
-        "10",
-        "11"
-      ]
-    },
-    {
-      "operatingsystem": "SLED",
-      "operatingsystemrelease": [
-        "9",
-        "10",
-        "11",
-        "12"
-      ]
-    },
+    // {
+    //   "operatingsystem": "Solaris",
+    //   "operatingsystemrelease": [
+    //     "9",
+    //     "10",
+    //     "11"
+    //   ]
+    // },
+    // {
+    //   "operatingsystem": "SLED",
+    //   "operatingsystemrelease": [
+    //     "9",
+    //     "10",
+    //     "11",
+    //     "12"
+    //   ]
+    // },
     {
       "operatingsystem": "Ubuntu",
       "operatingsystemrelease": [
