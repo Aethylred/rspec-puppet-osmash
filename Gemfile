@@ -1,6 +1,5 @@
 source 'https://rubygems.org'
-gemspec
-
+gem 'json',       '~> 1'
 gem 'rake'
 gem 'rspec',      ENV['RSPEC_VERSION']
 gem 'rspec-core', ENV['RSPEC_VERSION']

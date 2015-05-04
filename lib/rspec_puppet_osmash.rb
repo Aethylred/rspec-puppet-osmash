@@ -51,7 +51,7 @@ class Rspec_puppet_osmash
     end
     @known = knownos.to_a
 
-    unknownos = self.osmetadata
+    unknownos = self.osmetadata.dup
     @osmash.each do | os |
       unknownos.delete_if { | mos |
         mos['operatingsystem'] == os['operatingsystem'] and
