@@ -32,23 +32,23 @@
         "7"
       ]
     },
-    // {
-    //   "operatingsystem": "Solaris",
-    //   "operatingsystemrelease": [
-    //     "9",
-    //     "10",
-    //     "11"
-    //   ]
-    // },
-    // {
-    //   "operatingsystem": "SLED",
-    //   "operatingsystemrelease": [
-    //     "9",
-    //     "10",
-    //     "11",
-    //     "12"
-    //   ]
-    // },
+    {
+      "operatingsystem": "Solaris",
+      "operatingsystemrelease": [
+        "9",
+        "10",
+        "11"
+      ]
+    },
+    {
+      "operatingsystem": "SLED",
+      "operatingsystemrelease": [
+        "9",
+        "10",
+        "11",
+        "12"
+      ]
+    },
     {
       "operatingsystem": "Ubuntu",
       "operatingsystemrelease": [
