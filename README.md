@@ -19,7 +19,7 @@ osmash = Rspec_puppet_osmash.new
 This should then be run through something to attach some `expectations` to each operating system, these expectations should be added using _rules_ rather than explicitly. These rules will most likely be very similar to the operating system selection logic used in the Puppet module itself.
 
 ```ruby
-supported_osmash = osmash.supported
+supported_osmash = osmash.supported.dup
 supported_osmash.map! { | os |
   case os['osfamily']{
     'Debian': {
