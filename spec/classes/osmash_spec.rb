@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe Rspec_puppet_osmash do
-
   context 'with no arguments' do
     osmash = Rspec_puppet_osmash.new
     it 'should have loaded an osmash library' do
@@ -714,7 +713,7 @@ describe Rspec_puppet_osmash do
         ]
       )
     end
-    it 'should make an osmash library of all supported operating systems' do
+    it 'should be able to list all the know operating systems from the loaded osmash library' do
       expect(osmash.known).to match_array(
         [
           {
@@ -1056,6 +1055,339 @@ describe Rspec_puppet_osmash do
             "operatingsystemrelease" => ["9", "10", "11", "12"]
           }
         ]
+      )
+    end
+  end
+  context 'with arguments' do
+    osmash = Rspec_puppet_osmash.new('test/short_metadata.json','test/short_osmash_library.json')
+    it 'should have loaded an osmash library' do
+      expect(osmash.all).to match_array(
+        [
+          {
+            "key"             => "el4",
+            "name"            => "RedHat 4",
+            "releasetype"     => "operatingsystemmajrelease",
+            "kernel"          => "Linux",
+            "osfamily"        => "RedHat",
+            "operatingsystem" => "RedHat",
+            "release"         => "4"
+          },
+          {
+            "key"             => "el5",
+            "name"            => "RedHat 5",
+            "releasetype"     => "operatingsystemmajrelease",
+            "kernel"          => "Linux",
+            "osfamily"        => "RedHat",
+            "operatingsystem" => "RedHat",
+            "release"         => "5"
+          },
+          {
+            "key"             => "el6",
+            "name"            => "RedHat 6",
+            "releasetype"     => "operatingsystemmajrelease",
+            "kernel"          => "Linux",
+            "osfamily"        => "RedHat",
+            "operatingsystem" => "RedHat",
+            "release"         => "6"
+          },
+          {
+            "key"             => "el7",
+            "name"            => "RedHat 7",
+            "releasetype"     => "operatingsystemmajrelease",
+            "kernel"          => "Linux",
+            "osfamily"        => "RedHat",
+            "operatingsystem" => "RedHat",
+            "release"         => "7"
+          },
+          {
+            "key"             => "centos4",
+            "name"            => "CentOS 4",
+            "releasetype"     => "operatingsystemmajrelease",
+            "kernel"          => "Linux",
+            "osfamily"        => "RedHat",
+            "operatingsystem" => "CentOS",
+            "release"         => "4"
+          },
+          {
+            "key"             => "debian6",
+            "name"            => "Debian \"Lenny\" 6",
+            "releasetype"     => "lsbdistid",
+            "lsbdistid"       => "Debian",
+            "kernel"          => "Linux",
+            "codename"        => "Lenny",
+            "osfamily"        => "Debian",
+            "operatingsystem" => "Debian",
+            "release"         => "6"
+          },
+          {
+            "key"             => "debian7",
+            "name"            => "Debian \"Wheezy\" 7",
+            "releasetype"     => "lsbdistid",
+            "lsbdistid"       => "Debian",
+            "kernel"          => "Linux",
+            "codename"        => "Wheezy",
+            "osfamily"        => "Debian",
+            "operatingsystem" => "Debian",
+            "release"         => "7"
+          },
+          {
+            "key"             => "debian7",
+            "name"            => "Debian \"Jessie\" 8",
+            "releasetype"     => "lsbdistid",
+            "lsbdistid"       => "Debian",
+            "kernel"          => "Linux",
+            "codename"        => "Jessie",
+            "osfamily"        => "Debian",
+            "operatingsystem" => "Debian",
+            "release"         => "8"
+          },
+          {
+            "key"             => "ubuntu1404",
+            "name"            => "Ubuntu \"Trusty Tahr\" 14.04",
+            "releasetype"     => "lsbdistrelease",
+            "lsbdistid"       => "Ubuntu",
+            "kernel"          => "Linux",
+            "codename"        => "Trusty Tahr",
+            "osfamily"        => "Debian",
+            "operatingsystem" => "Ubuntu",
+            "release"         => "14.04",
+            "longservice"     => "true"
+          }
+        ]
+      )
+    end
+    it 'should have loaded module metadata' do
+      expect(osmash.metadata).to eq(
+        {
+          "name"                    => "test-metadata",
+          "operatingsystem_support" => [
+            {
+              "operatingsystemrelease" => ["6"],
+              "operatingsystem"        => "Debian"
+            },
+            {
+              "operatingsystemrelease" => ["5", "6", "7"],
+              "operatingsystem"        => "RedHat"
+            }
+          ]
+        }
+      )
+    end
+    it 'should have extracted the supported operating sytems metadata' do
+      expect(osmash.osmetadata).to match_array(
+        [
+          {
+            "operatingsystemrelease" => ["6"],
+            "operatingsystem"        => "Debian"
+          },
+          {
+            "operatingsystemrelease" => ["5", "6", "7"],
+            "operatingsystem"        => "RedHat"
+          }
+        ]
+      )
+    end
+    it 'should have created an osmash library of supported operating systems from the module metadata' do
+      expect(osmash.supported).to match_array(
+        [
+          {
+            "key"             => "el7",
+            "name"            => "RedHat 7",
+            "releasetype"     => "operatingsystemmajrelease",
+            "kernel"          => "Linux",
+            "osfamily"        => "RedHat",
+            "operatingsystem" => "RedHat",
+            "release"         => "7"
+          },
+          {
+            "key"             => "debian6",
+            "name"            => "Debian \"Lenny\" 6",
+            "releasetype"     => "lsbdistid",
+            "lsbdistid"       => "Debian",
+            "kernel"          => "Linux",
+            "codename"        => "Lenny",
+            "osfamily"        => "Debian",
+            "operatingsystem" => "Debian",
+            "release"         => "6"
+          },
+          {
+            "key"             => "el5",
+            "name"            => "RedHat 5",
+            "releasetype"     => "operatingsystemmajrelease",
+            "kernel"          => "Linux",
+            "osfamily"        => "RedHat",
+            "operatingsystem" => "RedHat",
+            "release"         => "5"
+          },
+          {
+            "key"             => "el6",
+            "name"            => "RedHat 6",
+            "releasetype"     => "operatingsystemmajrelease",
+            "kernel"          => "Linux",
+            "osfamily"        => "RedHat",
+            "operatingsystem" => "RedHat",
+            "release"         => "6"
+          }
+        ]
+      )
+    end
+    it 'should have created an osmash library of unsupported operating systems that are not in the module metadata' do
+      expect(osmash.unsupported).to match_array(
+         [
+          {
+            "key"             => "ubuntu1404",
+            "name"            => "Ubuntu \"Trusty Tahr\" 14.04",
+            "releasetype"     => "lsbdistrelease",
+            "lsbdistid"       => "Ubuntu",
+            "kernel"          => "Linux",
+            "codename"        => "Trusty Tahr",
+            "osfamily"        => "Debian",
+            "operatingsystem" => "Ubuntu",
+            "release"         => "14.04",
+            "longservice"     => "true"
+          },
+          {
+            "key"             => "debian7",
+            "name"            => "Debian \"Wheezy\" 7",
+            "releasetype"     => "lsbdistid",
+            "lsbdistid"       => "Debian",
+            "kernel"          => "Linux",
+            "codename"        => "Wheezy",
+            "osfamily"        => "Debian",
+            "operatingsystem" => "Debian",
+            "release"         => "7"
+          },
+          {
+            "key"             => "debian7",
+            "name"            => "Debian \"Jessie\" 8",
+            "releasetype"     => "lsbdistid",
+            "lsbdistid"       => "Debian",
+            "kernel"          => "Linux",
+            "codename"        => "Jessie",
+            "osfamily"        => "Debian",
+            "operatingsystem" => "Debian",
+            "release"         => "8"
+          },
+          {
+            "key"             => "centos4",
+            "name"            => "CentOS 4",
+            "releasetype"     => "operatingsystemmajrelease",
+            "kernel"          => "Linux",
+            "osfamily"        => "RedHat",
+            "operatingsystem" => "CentOS",
+            "release"         => "4"
+          },
+          {
+            "key"             => "el4",
+            "name"            => "RedHat 4",
+            "releasetype"     => "operatingsystemmajrelease",
+            "kernel"          => "Linux",
+            "osfamily"        => "RedHat",
+            "operatingsystem" => "RedHat",
+            "release"         => "4"
+          }
+        ]
+      )
+    end
+    it 'should be able to list all the know operating systems from the loaded osmash library' do
+      expect(osmash.known).to match_array(
+        [
+          {
+            "key"             => "ubuntu1404",
+            "name"            => "Ubuntu \"Trusty Tahr\" 14.04",
+            "releasetype"     => "lsbdistrelease",
+            "lsbdistid"       => "Ubuntu",
+            "kernel"          => "Linux",
+            "codename"        => "Trusty Tahr",
+            "osfamily"        => "Debian",
+            "operatingsystem" => "Ubuntu",
+            "release"         => "14.04",
+            "longservice"     => "true"
+          },
+          {
+            "key"             => "debian7",
+            "name"            => "Debian \"Wheezy\" 7",
+            "releasetype"     => "lsbdistid",
+            "lsbdistid"       => "Debian",
+            "kernel"          => "Linux",
+            "codename"        => "Wheezy",
+            "osfamily"        => "Debian",
+            "operatingsystem" => "Debian",
+            "release"         => "7"
+          },
+          {
+            "key"             => "el7",
+            "name"            => "RedHat 7",
+            "releasetype"     => "operatingsystemmajrelease",
+            "kernel"          => "Linux",
+            "osfamily"        => "RedHat",
+            "operatingsystem" => "RedHat",
+            "release"         => "7"
+          },
+          {
+            "key"             => "debian7",
+            "name"            => "Debian \"Jessie\" 8",
+            "releasetype"     => "lsbdistid",
+            "lsbdistid"       => "Debian",
+            "kernel"          => "Linux",
+            "codename"        => "Jessie",
+            "osfamily"        => "Debian",
+            "operatingsystem" => "Debian",
+            "release"         => "8"
+          },
+          {
+            "key"             => "debian6",
+            "name"            => "Debian \"Lenny\" 6",
+            "releasetype"     => "lsbdistid",
+            "lsbdistid"       => "Debian",
+            "kernel"          => "Linux",
+            "codename"        => "Lenny",
+            "osfamily"        => "Debian",
+            "operatingsystem" => "Debian",
+            "release"         => "6"
+          },
+          {
+            "key"             => "el5",
+            "name"            => "RedHat 5",
+            "releasetype"     => "operatingsystemmajrelease",
+            "kernel"          => "Linux",
+            "osfamily"        => "RedHat",
+            "operatingsystem" => "RedHat",
+            "release"         => "5"
+          },
+          {
+            "key"             => "centos4",
+            "name"            => "CentOS 4",
+            "releasetype"     => "operatingsystemmajrelease",
+            "kernel"          => "Linux",
+            "osfamily"        => "RedHat",
+            "operatingsystem" => "CentOS",
+            "release"         => "4"
+          },
+          {
+            "key"             => "el6",
+            "name"            => "RedHat 6",
+            "releasetype"     => "operatingsystemmajrelease",
+            "kernel"          => "Linux",
+            "osfamily"        => "RedHat",
+            "operatingsystem" => "RedHat",
+            "release"         => "6"
+          },
+          {
+            "key"             => "el4",
+            "name"            => "RedHat 4",
+            "releasetype"     => "operatingsystemmajrelease",
+            "kernel"          => "Linux",
+            "osfamily"        => "RedHat",
+            "operatingsystem" => "RedHat",
+            "release"         => "4"
+          }
+        ]
+      )
+    end
+    it 'should list the operating systems from the module metadata that are not recognised' do
+      expect(osmash.unknown).to match_array(
+        []
       )
     end
   end

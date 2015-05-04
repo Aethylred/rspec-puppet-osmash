@@ -1,0 +1,83 @@
+[
+  {
+    "key"             : "el4",
+    "osfamily"        : "RedHat",
+    "operatingsystem" : "RedHat",
+    "kernel"          : "Linux",
+    "release"         : "4",
+    "releasetype"     : "operatingsystemmajrelease"
+  },
+  {
+    "key"             : "el5",
+    "osfamily"        : "RedHat",
+    "operatingsystem" : "RedHat",
+    "kernel"          : "Linux",
+    "release"         : "5",
+    "releasetype"     : "operatingsystemmajrelease"
+  },
+  {
+    "key"             : "el6",
+    "osfamily"        : "RedHat",
+    "operatingsystem" : "RedHat",
+    "kernel"          : "Linux",
+    "release"         : "6",
+    "releasetype"     : "operatingsystemmajrelease"
+  },
+  {
+    "key"             : "el7",
+    "osfamily"        : "RedHat",
+    "operatingsystem" : "RedHat",
+    "kernel"          : "Linux",
+    "release"         : "7",
+    "releasetype"     : "operatingsystemmajrelease"
+  },
+  {
+    "key"             : "centos4",
+    "osfamily"        : "RedHat",
+    "operatingsystem" : "CentOS",
+    "kernel"          : "Linux",
+    "release"         : "4",
+    "releasetype"     : "operatingsystemmajrelease"
+  },
+  {
+    "key"             : "debian6",
+    "osfamily"        : "Debian",
+    "operatingsystem" : "Debian",
+    "kernel"          : "Linux",
+    "release"         : "6",
+    "codename"        : "Lenny",
+    "lsbdistid"       : "Debian",
+    "releasetype"     : "lsbdistid"
+  },
+  {
+    "key"             : "debian7",
+    "osfamily"        : "Debian",
+    "operatingsystem" : "Debian",
+    "kernel"          : "Linux",
+    "release"         : "7",
+    "codename"        : "Wheezy",
+    "lsbdistid"       : "Debian",
+    "releasetype"     : "lsbdistid"
+  },
+  {
+    "key"             : "debian7",
+    "osfamily"        : "Debian",
+    "operatingsystem" : "Debian",
+    "kernel"          : "Linux",
+    "release"         : "8",
+    "codename"        : "Jessie",
+    "lsbdistid"       : "Debian",
+    "releasetype"     : "lsbdistid"
+  },
+  {
+    "key"             : "ubuntu1404",
+    "osfamily"        : "Debian",
+    "operatingsystem" : "Ubuntu",
+    "kernel"          : "Linux",
+    "lsbdistid"       : "Ubuntu",
+    "release"         : "14.04",
+    "codename"        : "Trusty Tahr",
+    "releasetype"     : "lsbdistrelease",
+    "longservice"     : "true"
+  }
+]
