@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = 'rspec_puppet_osmash'
-  s.version     = '0.0.1'
+  s.version     = '0.1.0'
   s.date        = '2015-04-30'
   s.summary     = 'Provides Operation System hashes and validations for rspec-puppet'
   s.description = 'Provides Operation System hashes and validations for rspec-puppet'

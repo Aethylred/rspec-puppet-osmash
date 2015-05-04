@@ -1,16 +1,22 @@
 # `rspec-puppet-osmash`
 
-The purpose of this gem is to provide a hash of Operating Systems with some tools, functions and methods for use with rspec-puppet.
+[![Build Status](https://travis-ci.org/Aethylred/rspec-puppet-osmash.svg?branch=master)](https://travis-ci.org/Aethylred/rspec-puppet-osmash)
 
-# Some really basic documentation written in a rush and is probably wrong
+The purpose of this gem is to generate a library of operating system facts (an _osmash library_) from a Puppet Module metadata file (`metadata.json`) with some tools, functions and methods for use with [`rspec-puppet`](http://rspec-puppet.com/).
 
-I recommend putting it in a puppet module's `spec/rspec_helper.rb` which should look for `metadata.json` relative to this.
+# Usage
+
+## Initialising an osmash library
+
+It is recommend that the osmash library for a Puppet module be initialised in `spec/rspec_helper.rb` and should automatically find `metadata.json` relative to this location.
 
 ```ruby
 osmash = Rspec_puppet_osmash.new
 ```
 
-This should then be run through something to attach some `expectations` to each operating system, these expectations should be added using _rules_ rather than explicitly.
+## Adding expectations
+
+This should then be run through something to attach some `expectations` to each operating system, these expectations should be added using _rules_ rather than explicitly. These rules will most likely be very similar to the operating system selection logic used in the Puppet module itself.
 
 ```ruby
 supported_osmash = osmash.supported
@@ -32,51 +38,63 @@ supported_osmash.map! { | os |
 }
 ```
 
-Then do something clever extracting facts to set operating system specific facts in your `rspec_puppet` tests and then check that the module is setting them to the expected value for that OS. This needs more words, but I have none at 5pm on a Friday.
+## Using an osmash library in tests
+
+Do something clever extracting facts to set operating system specific facts in your `rspec_puppet` tests and then check that the module is setting them to the expected value for that OS. 
+
+This needs to be tested before more can be written.
+
+# Class `rspec_puppet_osmash`
+
+This class is front-loaded so that the initialiser loads the module metadata and osmash library and processes all the results immediately. This should reduce access time for the resulting output and minimise recalculation.
 
 ## Initialise
 
-The initialiser takes two parameters:
+The initialiser takes two optional parameters:
+
+```ruby
+osmash = Rspec_puppet_osmash.new(metadata_file_path,osmash_library_path)
+```
 
 ### `metadata_file_path`
 
-Sets the path to the module's `metadata.json` file
+Sets the path to the `metadata.json` file for the Puppet Module
 
 ### `osmash_library_path`
 
-Sets the path to a osmash OS library JSON file. A defaul library is included. This library contains a collection of OSes with facts as expected from facter.
+Sets the path to a osmash library stored as a JSON file. A default osmash library is included and will be used if none is provided. This library contains a collection of operating systems with facts as expected from facter.
 
 ## Accessors
 
-This should do all the work when initialises, and just pull the processed data via access methods.
+The values returned by the access methods are determined when first initialised, and just pull the processed data via access methods. 
 
-### `osmash.all`
+### `rspec_puppet_osmash.all`
 
-Outputs an osmash library as array of hashes for all the operating systems from the loaded osmash OS library
+Outputs the loaded osmash OS library as an array of hashes.
 
-### `osmash.supported`
+### `rspec_puppet_osmash.supported`
 
-Outputs an osmash library as array of hashes for all the operating systems from the loaded osmash OS library that are named as being supported in a modules `metadata.json`
+Outputs an osmash library as array of hashes for all the operating systems from the loaded osmash library that are named as being supported in the `metadata.json` file for the Puppet module.
 
-### `osmash.unsupported`
+### `rspec_puppet_osmash.unsupported`
 
-Outputs an osmash library as array of hashes for all the operating systems from the loaded osmash OS library that are _not_ named as being supported in a modules `metadata.json`.
+Outputs an osmash library as array of hashes for all the operating systems from the loaded osmash OS library that are _not_ named as being supported in the `metadata.json` file for the Puppet module.
 
-### `osmash.known`
+### `rspec_puppet_osmash.known`
 
-Outputs an osmash library as array of hashes for all the operating systems from the loaded osmash OS library. Yes this seems to replicate `osmash.all` it needs checking.
+Outputs the loaded osmash OS library as an array of hashes. (_Note:_his seems to replicate `rspec_puppet_osmash.all` it needs checking.)
 
-### `osmash.unknown`
+### `rspec_puppet_osmash.unknown`
 
-Outputs the supported operating system metadata loaded from a module's `metadata.json` as a hash, but _only_ those OSes that osmash can not find in it's library. *NOTE:* It's not reliably doing operating system by release yet.
+Outputs the supported operating system metadata loaded from a module's `metadata.json` as a hash, but _only_ those OSes that can not be found in the loaded osmash library. (*WARNING:* It's not reliably doing operating system by release yet.)
 
-### `osmash.metadata`
+### `rspec_puppet_osmash.metadata`
 
-Outputs the metadata loaded from a module's `metadata.json` as a hash.
+Outputs a hash of the metadata loaded from the `metadata.json` file for the Puppet module.
 
-### `osmash.osmetadata`
+### `rspec_puppet_osmash.osmetadata`
 
-Outputs all the supported operating system metadata loaded from a module's `metadata.json` as a hash.
+Outputs a hash of all the supported operating system metadata loaded from the `metadata.json` file for the Puppet module.
 
 # Licensing
 
