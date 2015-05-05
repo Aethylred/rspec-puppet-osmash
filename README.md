@@ -8,41 +8,110 @@ The purpose of this gem is to generate a library of operating system facts (an _
 
 ## Initialising an osmash library
 
-It is recommend that the osmash library for a Puppet module be initialised in `spec/rspec_helper.rb` and should automatically find `metadata.json` relative to this location.
+It is recommend that the osmash library for a Puppet module be initialised in `spec/rspec_helper.rb` and should automatically find `metadata.json` relative to this location. The osmash library needs to be a global variable so it is visible to the test scripts that will use it.
 
 ```ruby
-osmash = Rspec_puppet_osmash.new
+$osmash = Rspec_puppet_osmash.new
 ```
 
 ## Adding expectations
 
-This should then be run through something to attach some `expectations` to each operating system, these expectations should be added using _rules_ rather than explicitly. These rules will most likely be very similar to the operating system selection logic used in the Puppet module itself.
+This should then be run through something to attach some `expectations` to each operating system, these expectations should be added using _rules_ rather than explicitly. These rules will most likely be very similar to the operating system selection logic used in the Puppet module itself. A working example can be seen in the [`Aethylred/puppet-postfix` module](https://github.com/Aethylred/puppet-postfix/blob/osmash/spec/spec_helper.rb).
 
 ```ruby
-supported_osmash = osmash.supported.dup
-supported_osmash.map! { | os |
-  case os['osfamily']{
-    'Debian': {
-      expectations = { 'expectations' => {
-        'test_key' => 'expected_value'
-      }
-    }
-    default = {
-      expectations = { 'expectations' => {
-        'test_key' => 'expected_value'
-        }
-      } 
-    }
+# Adding expectations to the supported operating systems
+$osmash.supported.map! do | os |
+  # These expectations are shared across all supported OSes
+  expectations = {
+    'sendmail_package'   => 'sendmail',
+    'sendmailcf_package' => 'sendmail-cf',
+    'sendmail_service'   => 'sendmail'
   }
-  os.merge(expectations)
-}
+
+  # These cases merges in the OS specific expectations
+  # The selection structure should be similar to what is used in the module
+  case os['osfamily']
+  when 'Debian'
+    expectations.merge!( {
+      'sendmail_ensure'  => 'purged',
+      'package'          => 'postfix',
+      'service'          => 'postfix',
+      'config_file'      => '/etc/postfix/main.cf'
+    } )
+  when 'RedHat'
+    expectations.merge!( {
+      'sendmail_ensure'  => 'absent',
+      'package'          => 'postfix',
+      'service'          => 'postfix',
+      'config_file'      => '/etc/postfix/main.cf'
+    } )
+  end
+
+  # The expectations are then merged with the OS and passed back up to the map
+  os.merge( { 'expectations' => expectations } )
+end
 ```
 
 ## Using an osmash library in tests
 
-Do something clever extracting facts to set operating system specific facts in your `rspec_puppet` tests and then check that the module is setting them to the expected value for that OS. 
+Operating system specific tests now take the form of iterating over the osmash library of supported operating systems (or the _unsupported_ operating systems for extreme thoroughness). A complete example is given in [`Aethylred/puppet-postfix` module](https://github.com/Aethylred/puppet-postfix/blob/osmash/spec/classes/postfix_spec.rb), from which a partial implementation is shown below.
 
-This needs to be tested before more can be written.
+```ruby
+# spec_helper populates $osmash consistently for every script
+require 'spec_helper'
+
+describe 'postfix', :type => :class do
+  $osmash.supported.each do |os|
+    context "on #{os['name']}" do
+      let :facts do
+        {
+          :osfamily => os['osfamily'],
+        }
+      end
+      it { should contain_class('postfix::params') }
+      it { should contain_package(os['expectations']['package']) }
+      it { should contain_service(os['expectations']['service']) }
+
+      describe 'with no parameters' do
+        it { should_not contain_service(os['expectations']['sendmail_service']) }
+        it { should_not contain_package(os['expectations']['sendmail_package']) }
+        it { should_not contain_package(os['expectations']['sendmailcf_package']) }
+      end
+
+      describe 'when removing sendmail' do
+        let :params do
+          { :remove_sendmail => true }
+        end
+        it { should contain_service(os['expectations']['sendmail_service']).with_ensure('stopped') }
+        it { should contain_package(os['expectations']['sendmail_package']).with_ensure(os['expectations']['sendmail_ensure']) }
+        it { should contain_package(os['expectations']['sendmailcf_package']).with_ensure(os['expectations']['sendmail_ensure']) }
+      end
+
+      describe 'when leaving sendmail alone' do
+        let :params do
+          { :remove_sendmail => false }
+        end
+        it { should_not contain_service(os['expectations']['sendmail_service']) }
+        it { should_not contain_package(os['expectations']['sendmail_package']) }
+        it { should_not contain_package(os['expectations']['sendmailcf_package']) }
+      end
+    end
+  end
+  
+  context 'on a Unkown OS' do
+    let :facts do
+      {
+        :osfamily => 'Unknown',
+      }
+    end
+    it { should raise_error(Puppet::Error,
+      %r{The postfix module does not support the Unknown family of operating systems.}
+    ) }
+  end
+
+end
+```
+
 
 # Class `rspec_puppet_osmash`
 
