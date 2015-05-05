@@ -151,7 +151,7 @@ Outputs an osmash library as array of hashes for all the operating systems from 
 
 ### `rspec_puppet_osmash.known`
 
-Outputs the loaded osmash OS library as an array of hashes. (_Note:_his seems to replicate `rspec_puppet_osmash.all` it needs checking.)
+Outputs the loaded osmash OS library as an array of hashes. (_Note:_ This seems to replicate `rspec_puppet_osmash.all` it needs checking.)
 
 ### `rspec_puppet_osmash.unknown`
 
@@ -164,6 +164,43 @@ Outputs a hash of the metadata loaded from the `metadata.json` file for the Pupp
 ### `rspec_puppet_osmash.osmetadata`
 
 Outputs a hash of all the supported operating system metadata loaded from the `metadata.json` file for the Puppet module.
+
+# Writing an osmash library file
+
+An osmash library file is an array of hashes stored in a JSON file. Each hash in the array represents a collection of facts about an operating system. There are a couple of examples provided in the source code:
+
+* [lib/osmas.json] which is the default osmash library
+* [test/short_osmash_library.json] a shorter osmash library used by the rspec tests.
+
+## Required key-value pairs
+
+### `operatingsystem`
+
+This label is used explicitly by osmash to match each operating system. This label must match the `operatingsystem` lable given in the Puppet Module metadata in order for it to match. It should match the `operatingsystem` fact given by facter.
+
+### `release`
+
+This label is used explicitly by osmash to match each operating system release. This label must match the `operatingsystemrelease` lable given in the Puppet Module metadata in order for it to match. However, the mapping to facter facts is dependent on which operating system is being evaluated.
+
+### `releasetype`
+
+This is used to map the `release` key value to a facter fact. (_NOTE:_ the default library might not be consistent with this. See issue [#1])
+
+## Recommended key-value pairs 
+
+### `codename`
+
+The `codename` is a name for the operating system release, e.g. the `codename` for Ubuntu 14.04 is _Trusty Tahr_
+
+### `key`
+
+This is just a unique identifier for each OS, e.g. `el4` for _RedHat Enterprise Linux 4_ or `ubuntu1404` for _Ubuntu 14.04_. This can be used as a primary key for quickly referencing a specific operating system hash. (_Note:_ There's no current check that `key` is actually unique.)
+
+## Generated key-value pairs
+
+### `name`
+
+The `name` key-value pair is generated using the `operatingsystem`, `codename`, and `release` key value pairs when `rspec_puppet_osmash` is initialised, unless it has already been defined in the osmash library JSON file.
 
 # Licensing
 
